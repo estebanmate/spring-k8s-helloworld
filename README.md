@@ -50,7 +50,7 @@ spec:
     spec:
       containers:
       - name: hello-world-pod
-        image: marounbassam/hello-spring
+        image: estebanmate/hello-spring
         ports:
         - containerPort: 8080
 ---

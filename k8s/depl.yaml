@@ -1,33 +1,47 @@
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: hello-world
+  name: k8sample-deployment
+  namespace: development
 spec:
   replicas: 2
   template:
     metadata:
       labels:
-        app: hello-world
+        app: k8sample
         visualize: "true"
     spec:
       containers:
-      - name: hello-world-pod
-        image: marounbassam/hello-spring
+      - name: k8sample-pod
+        image: estebanmate/emtp/k8sample:1.0
         ports:
-        - containerPort: 8080
+        - containerPort: 8090       
+        livenessProbe:
+          httpGet:
+            path: /actuator/health/liveness
+            port: 8090
+          initialDelaySeconds: 5
+          periodSeconds: 1
+        readinessProbe:
+          httpGet:
+            path: /actuator/health/readiness
+            port: 8090
+          initialDelaySeconds: 5
+          periodSeconds: 1        
 ---
 apiVersion: v1
 kind: Service
 metadata:
   labels:
     visualize: "true"
-  name: hello-world-service
+  name: k8sample-service
+  namespace: development
 spec:
   selector:
-    app: hello-world
+    app: k8sample
   ports:
   - name: http
     protocol: TCP
-    port: 8080
-    targetPort: 8080
+    port: 8090
+    targetPort: 80890
   type: ClusterIP

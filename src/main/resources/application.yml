@@ -1,0 +1,30 @@
+server:
+  port: 8090
+
+spring:
+  application:
+    name: kubernetes
+
+management:
+  server:
+    port: 9000
+  endpoints:
+    web:
+      exposure:
+        # Expose Actuator's/actuator/prometheus endpoint:   health,info,prometheus
+        include: "*"
+    health:
+      probes:
+        enabled: true    
+  metrics:
+    tags:
+      # Set a Tag for the metric, set here to the application name, Tag is one of the capabilities provided by Prometheus for more flexible filtering
+      application: ${spring.application.name}
+
+logging:
+  level:
+    root: INFO
+    org.springframework: ERROR
+  file:
+    name: ./logs/kubernetes.log
+
